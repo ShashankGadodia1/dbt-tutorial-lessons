@@ -23,6 +23,8 @@ clean-targets:         # directories to be removed by `dbt clean`
   - "target"
   - "dbt_packages"
 
+on-run-start:
+  - "{{ get_brand_name() }}"
 
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
@@ -39,8 +41,20 @@ models:
     +persist_docs:
       relation: true
       columns: true
-     # Table deletes 168 hours (7 days) after creation
+    # Table deletes 168 hours (7 days) for non dev env after creation
     +hours_to_expiration: 168
+    #+hours_to_expiration: |
+      #{%- if target.name == "dev" -%} 1
+      #{%- else -%} 168
+      #{%- endif -%}
+
+    mart:
+      +tags: ['proj1','lob1']
+      +schema: staging
+    intermediate:
+      +schema: intermediate
+    staging:
+      +schema: staging
 
 tests:
   lessons:

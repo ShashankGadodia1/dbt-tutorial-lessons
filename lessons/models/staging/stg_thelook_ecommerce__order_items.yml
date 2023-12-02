@@ -1,0 +1,113 @@
+version: 2
+
+# Data contracts are a way of guaranteeing the shape and datatypes of a dbt model. They’re useful for running checks before a model is created - rather than tests which are run after - and they’re useful for models with key downstream dependencies.
+#
+# Contracts can be set for models that are materialised as a table, view, or incremental. You can’t define a contract for an ephemeral model at the moment.
+#
+# To enforce a contract on a data model, you must tell dbt through the model config:
+#
+# models:
+#   - name: stg_ecommerce__order_items
+#     description: "Line items from orders"
+#     config:
+#       contract:
+#         enforced: true
+# Once set, you must, for every column, set a data type. Note: dbt doesn’t alias datatypes - meaning that each data type specified must be valid for BigQuery / Snowflake / Redshift etc. depending on what version of dbt you’re using.
+#
+# For example: INTEGER and INT64 are both valid datatypes in BigQuery, but FLOAT isn’t valid (and FLOAT64 is).
+#
+# 	  - name: item_sale_price
+#         data_type: FLOAT64
+#
+# You can also, depending on what data platform you’re using, use constraints. Think of these as dbt tests that are run before a model is created.
+#
+# For example, the not_null constraint is (the only constraint) supported by BigQuery. You can use this constraint to replace an equivalent not_null dbt test.
+#
+# 			- name: product_id
+#         data_type: INTEGER
+#         constraints:
+#           - type: not_null
+#
+#
+# You can define constraints on a model level, or a column level (as above). They can be one of the following types:
+#
+# not_null
+# unique
+# primary_key
+# foreign_key
+# check (equivalent of a dbt_utils.expression_is_true)
+# custom
+#
+# As mentioned in the video, BigQuery only supports not_null - you can read more about constraints here. There are other checks that BigQuery does but doesn’t enforce (i.e. if it fails it will only warn not error) such as primary_key.
+
+# Constraints require the declaration and enforcement of a model contract.
+# Constraints are never applied on ephemeral models or those materialized as view.
+# Only table and incremental models support applying and enforcing constraints.
+
+models:
+  - name: stg_thelook_ecommerce__order_items
+    description: "Line items from orders"
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: order_item_id
+        data_type: INTEGER
+        constraints:
+          - type: not_null
+        tests:
+          - primary_key:
+              severity: error
+
+      - name: order_id
+        data_type: INTEGER
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_thelook_ecommerce__orders')
+              field: order_id
+
+      - name: user_id
+        data_type: INTEGER
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+
+      - name: product_id
+        data_type: INTEGER
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_thelook_ecommerce__products')
+              field: product_id
+
+      - name: item_sale_price
+        data_type: FLOAT64
+        description: "How much the item sold for"
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+      - name: created_at
+        data_type: timestamp
+        description: ""
+      - name: delivered_at
+        data_type: timestamp
+        description: ""
+      - name: inventory_item_id
+        data_type: INTEGER
+        description: ""
+      - name: returned_at
+        data_type: timestamp
+        description: ""
+      - name: shipped_at
+        data_type: timestamp
+        description: ""
+      - name: status
+        data_type: string
+        description: ""

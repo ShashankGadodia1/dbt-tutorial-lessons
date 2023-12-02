@@ -49,3 +49,21 @@ models:
               # false if you wanted to have non-string values (e.g. numbers or a TRUE/FALSE column)
               quote: true
               severity: error
+
+      - name: brand
+        description: "This column holds the brand value."
+
+    latest_version: 2
+
+    versions:
+        - v: 1
+          columns:
+            - include: all
+              exclude: [brand]
+
+        - v: 2
+          columns:
+            - include: all
+          # Makes this table stays as stg_ecommerce__products in our database!
+          config:
+            alias: stg_thelook_ecommerce__products

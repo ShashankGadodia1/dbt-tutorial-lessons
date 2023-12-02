@@ -1,8 +1,26 @@
 version: 2
 
+groups:
+  - name: sales
+    owner:
+      email: sales-xyz@my-organization.com
+      slack: sales-data
+      github: sales-team
+
+  - name: marketing
+    owner:
+      email: marketing-xyz@my-organization.com
+      slack: marketing-data
+      github: marketing-team
+
 models:
   - name: orders
     description: "Table of order level information"
+    config:
+      group: sales
+
+    access: protected #This model can be accessible to all models in lessons projects. This is default access type.
+    #access: private #This model is accessible from sales group only.
     columns:
       - name: order_id
         tests:

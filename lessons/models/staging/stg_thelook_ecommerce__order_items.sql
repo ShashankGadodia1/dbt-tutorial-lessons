@@ -7,9 +7,10 @@ WITH source AS (
 SELECT
         id AS order_item_id,
         order_id,
-        user_id,
+        user_id as user_id,
         product_id,
-        inventory_item_id,
+		inventory_item_id,
+        --cast(inventory_item_id as string) as inventory_item_id,
         status,
         created_at,
         shipped_at,

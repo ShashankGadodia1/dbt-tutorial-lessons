@@ -7,7 +7,6 @@ SELECT
         cost,
         category,
         name,
-        brand,
         retail_price,
         department,
         sku,

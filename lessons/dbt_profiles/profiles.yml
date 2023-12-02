@@ -1,0 +1,41 @@
+lessons:
+  target: dev
+  outputs:
+    dev:
+      dataset: analytics_shashank
+      job_execution_timeout_seconds: 300
+      job_retries: 1
+      keyfile: C:\Users\shash\OneDrive\My Learning\DBT\Mastering dbt - From Begenning
+        to Pro\digital-sprite-404604-6a798dd8e70f.json
+      location: US
+      method: service-account
+      priority: interactive
+      project: digital-sprite-404604
+      threads: 3
+      type: bigquery
+
+    uat:
+      dataset: analytics_shashank_uat
+      job_execution_timeout_seconds: 300
+      job_retries: 1
+      keyfile: C:\Users\shash\OneDrive\My Learning\DBT\Mastering dbt - From Begenning
+        to Pro\digital-sprite-404604-6a798dd8e70f.json
+      location: US
+      method: service-account
+      priority: interactive
+      project: digital-sprite-404604
+      threads: 3
+      type: bigquery
+
+    prod:
+      dataset: analytics_shashank_prod
+      job_execution_timeout_seconds: 300
+      job_retries: 1
+      keyfile: C:\Users\shash\OneDrive\My Learning\DBT\Mastering dbt - From Begenning
+        to Pro\digital-sprite-404604-6a798dd8e70f.json
+      location: US
+      method: service-account
+      priority: interactive
+      project: digital-sprite-404604
+      threads: 3
+      type: bigquery

@@ -16,15 +16,14 @@
 		needed to write the SQL to a table once a query has run, but it's faster to SELECT * a table than
 		to run a view
 	- Incremental: when your table models start getting very slow when you are doing a drop & replace
+	- Incremental View: This materialization provide benifit of both table and view. Faster data retrival and latest data refresh. You can set refresh strategy for mat view on schema change refresh data or fail.
+
 #}
 {{
 	config(materialized='ephemeral')
 }}
-
-
 SELECT
 	user_id,
 	MIN(created_at) AS first_order_created_at
-
 FROM {{ ref('stg_thelook_ecommerce__orders') }}
 GROUP BY 1
