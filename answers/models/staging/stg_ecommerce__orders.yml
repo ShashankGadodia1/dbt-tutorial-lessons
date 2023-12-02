@@ -4,13 +4,17 @@ models:
   - name: stg_ecommerce__orders
     columns:
       - name: order_id
+        description: 'Primary Key for table'
         tests:
           - not_null:
               severity: error
           - unique:
               severity: error
+          - primary_key:
+              severity: error
 
       - name: user_id
+        description: 'This is user id'
         tests:
           - not_null
 
